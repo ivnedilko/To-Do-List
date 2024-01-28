@@ -1,18 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
 body {
-  background-color: #FFD78A;
-  font-family: sans-serif;
+  
   -webkit-box-sizing: content-box;
   box-sizing: content-box; 
+  background: no-repeat;
+  background-image: url("/img/bg_image.jpg");
+  background-size:cover;
+}
+
+*{
+  font-family: sans-serif;
 }
 
 .container {
   margin: 0 auto;
   padding-top: 50px; 
-}
-
-.important {
-  font-weight: bold;
-  color: #A40E11; 
 }
 
 .to_do_list {
@@ -37,16 +40,37 @@ h1 {
   text-align: center; 
 }
 
-input[type=text] {
+.to_do_description {
   width: 376px;
   padding: 10px; 
 }
 
-button {
-  margin-top: 10px;
+.to_do_date-title{
+  margin: 15px;
+  color: #fff;
+  font-size: 20px;
+}
+
+.to_do_date-value{
+  padding: 10px;
+  width: 376px;
+}
+
+.to_do_field{
+  font-size: 16px;
+}
+
+.to_do-add{
+  margin-top: 15px;
   width: 400px;
   padding: 10px;
   cursor: pointer; 
+}
+
+.to_do_motivation{
+  font-family: 'Pacifico', cursive;
+  font-size: 20px;
+  color: #fff;
 }
 
 .to_do {
@@ -54,17 +78,53 @@ button {
 }
 
 .to_do li {
-  padding: 1em;
+  padding: 5px 0px;
   list-style-type: none; 
+  display: flex;
+  align-items: start;
 }
 
 .to_do li:not(:last-child) {
   border-bottom: 1px solid #000; 
 }
 
-input[type=checkbox] {
+.to_do_checkbox{
   width: 20px;
   height: 20px;
+  margin-left: 0px;
+  flex-shrink: 0;
+}
+
+.to_do_item_date{
+  font-size: 16px;
+  color: #fff;
+  font-style: italic;
+}
+
+.to_do_item_text{
+  display: inline-block;
+  font-size: 18px;
+  color: #fff;
+  margin-top: 3px;
+  text-align: justify;
+  flex-grow: 1;
+}
+
+.to_do_item_important {
+  font-weight: bold;
+  color: #A40E11 !important; 
+}
+
+.to_do_delete{
+  color: #000;
+  font-size: 16px;
+  line-height: 15px;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+  margin-top: 3px;
+  margin-left: 5px;
+  flex-shrink: 0;
 }
 
 /* input[type=checkbox] {
@@ -104,5 +164,6 @@ input[type=checkbox]:checked + label:before {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   border-radius: 0;
-  margin: 0 15px 5px 5px;  */
+  margin: 0 15px 5px 5px;  
 }
+*/

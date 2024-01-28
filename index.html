@@ -5,15 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="favicon.png" type="image/x-icon">
   <link rel="stylesheet" type="text/css" href="styles.css">
-  <title>To do list</title>
+  <title>Заплануй та Здійсни</title>
 </head>
 <body>
   <div class="container">
     <div class="to_do_list">
-         <h1>My workday</h1>
+        <h1>Заплануй та Здійсни</h1>
+        <p class="to_do_motivation">"Починай вже зараз жити тим життям, яким ти хотів би бачити його в кінці." (Марк Аврелій)</p>
         <div class="create_new_todo">
-            <input type="text" class="message" placeholder="Опис">
-            <button class="add">Додати</button>
+            <input type="text" class="to_do_description to_do_field" placeholder="Опис"/>
+            <div class="to_do_date-title">Обери термін втілення</div>
+            <input
+              type="date"
+              class="to_do_date-value to_do_field"/>
+            <button class="to_do-add to_do_field">Додати</button>
         </div>
         <div class="wrapper">
             <ul class="to_do"></ul>

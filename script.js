@@ -1,73 +1,141 @@
-const addMessage = document.querySelector(".message");
-const addButton = document. querySelector(".add");
-const todo = document.querySelector(".to_do");
+const todoDescriptionField = document.querySelector(".to_do_description");
+const todoDateField = document.querySelector(".to_do_date-value");
+const todoAddButton = document. querySelector(".to_do-add");
+const todoPanel = document.querySelector(".to_do");
 
 let toDoList = [];
 
-if(localStorage.getItem("todo")){
-  toDoList = JSON.parse(localStorage.getItem("todo"));
-  displayMessages();
+let savedData = localStorage.getItem("todo");
+
+if(savedData){
+  toDoList = JSON.parse(savedData);
+  showTodos();
 }
 
-addButton.addEventListener('click', function(){
-  if(!addMessage.value){
+function formatDate(date) {
+  var day = date.getDate();
+  var month = date.getMonth() + 1; //January is 0!
+  var year = date.getFullYear();
+
+  if(day < 10) {
+    day = '0' + day
+  } 
+
+  if(month < 10) {
+    month = '0'+month
+  } 
+
+  return `${year}-${month}-${day}`;
+}
+
+let curdate = formatDate(new Date()); 
+todoDateField.value = curdate;
+
+todoAddButton.addEventListener('click', addTodo);
+
+function addTodo(){
+  if(!todoDescriptionField.value){
     return;
   }
+
+  if(!todoDateField.value){
+    return;
+  }
+
   let newToDo = {
-    todo: addMessage.value,
-    checked: true,
+    todo: todoDescriptionField.value,
+    date: todoDateField.value,
+    checked: false,
     important: false
   };
-
   toDoList.push(newToDo);
-  displayMessages();
-  localStorage.setItem("todo", JSON.stringify(toDoList));
-  addMessage.value = "";
-});
 
-function displayMessages(){
-  let displayMessage = "";
-  if(toDoList.length === 0){
-    todo.innerHTML = "";
-  }
-  toDoList.forEach(function(item, i){
-    displayMessage += `
-  <li>
-    <input type='checkbox' id='item_${i}'>
-    <label for='item_${i}' class="${item.important ? "important" : " "}">${item.todo}</label>
-  </li>
-  `;
-    todo.innerHTML = displayMessage;
-  })
+  let todoDate = JSON.stringify(toDoList);
+  localStorage.setItem("todo", todoDate);
+
+  showTodos();
+
+  todoDescriptionField.value = "";
+
+  let curdate = formatDate(new Date()); 
+  todoDateField.value = curdate;
 }
 
-todo.addEventListener('change', function(e){
-  let idInput = e.target.getAttribute("id");
-  let forLabel = todo.querySelector('[for='+ idInput +']');
+function showTodos(){
+  if(toDoList.length === 0){
+    todoPanel.innerHTML = "";
+    return;
+  }
 
-  let valueLabel = forLabel.innerHTML;
-  console.log("valueLabel:", valueLabel);
+  let todosContent = "";
 
-  toDoList.forEach(function(item){
-    if(item.todo === valueLabel) {
-      item.checked = !item.checked;
-      localStorage.setItem("todo", JSON.stringify(toDoList));
-    }
+  toDoList.forEach(function(item, i){
+    let todoItem = createTodoItem(item, i);
+    todosContent += todoItem;
   });
-});
 
-todo.addEventListener("contextmenu", function(e){
+  todoPanel.innerHTML = todosContent;
+}
+
+function createTodoItem(item, id) {
+  let itemName = `item_${id}`;
+  let formattedDate = formatDateToDisplay(item.date);
+  return `
+  <li>
+    <input onclick="toggleTodo('${itemName}')" type='checkbox' id='${itemName}' class="to_do_checkbox" ${item.checked ? "checked" : ""}>
+    <label for='${itemName}' class="to_do_item_text ${item.important ? "to_do_item_important" : ""}">
+      <div class="to_do_item_date">${formattedDate}</div>  
+      <span name="${itemName}">${item.todo}</span>
+    </label>
+    <button onclick="deleteToDo('${itemName}')" class="to_do_delete">X</button>
+  </li>
+  `;
+}
+
+function formatDateToDisplay(dateString) {
+  let date = new Date(dateString);
+  return date.toLocaleDateString();
+}
+
+function toggleTodo(itemName){
+  let forLabel = todoPanel.querySelector('[name='+ itemName +']');
+  let valueLabel = forLabel.innerHTML;
+
+  for(let i=0; i < toDoList.length; i++){
+    let todoItem = toDoList[i]; 
+    if(todoItem.todo === valueLabel){
+      todoItem.checked = !todoItem.checked;
+      console.log(todoItem);
+      localStorage.setItem("todo", JSON.stringify(toDoList));
+      break;
+    }
+  }
+}
+
+function deleteToDo(itemName){
+  let forLabel = todoPanel.querySelector('[name='+ itemName +']');
+  let valueLabel = forLabel.innerHTML;
+
+  for(let i=0; i < toDoList.length; i++){
+    let todoItem = toDoList[i]; 
+    if(todoItem.todo === valueLabel){
+      toDoList.splice(i, 1);
+      showTodos();
+      localStorage.setItem("todo", JSON.stringify(toDoList));
+      break;
+    }
+  }
+}
+
+todoPanel.addEventListener("contextmenu", function(e){
   e.preventDefault();
   
   toDoList.forEach(function(item, i){
     if(item.todo === e.target.innerHTML){
-      if(e.ctrlKey || e.metaKey){
-        toDoList.splice(i, 1);
-      }else{
-        item.important = !item.important;
-      }
-      displayMessages();
+      item.important = !item.important;
+      showTodos();
       localStorage.setItem("todo", JSON.stringify(toDoList));
     }
   });
 });
+
